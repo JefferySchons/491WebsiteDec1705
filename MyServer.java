@@ -53,7 +53,7 @@ public class MyServer {
 				// 2.2 SPAWN A THREAD TO HANDLE CLIENT REQUEST
 				System.out.println("Server got connected to a client"
 						+ ++clientNum);
-				ClientHandler test =new ClientHandler(clientSocket, arrayOfThread, clientNum));
+				ClientHandler test =new ClientHandler(clientSocket, arrayOfThread, clientNum);
 				arrayOfThread.add(test);
 				Thread t = new Thread(test);
 
@@ -75,10 +75,12 @@ public class MyServer {
 class ClientHandler implements Runnable {
 	Socket s; // this is socket on the server side that connects to the CLIENT
 	int num; // keeps track of its number just for identifying purposes
+	ArrayList<ClientHandler> threadArray;
 
-	ClientHandler(Socket s, int n) {
+	ClientHandler(Socket s, ArrayList<ClientHandler> arrayOfThread, int n) {
 		this.s = s;
 		num = n;
+		threadArray = arrayOfThread;
 	}
 
 	// This is the client handling code
@@ -141,10 +143,22 @@ class ClientHandler implements Runnable {
 			e.printStackTrace();
 		}
 		
+		
+		/*
+		 * 
+		 * //send to other clients //TODO
+					for (int i=1; i<threadArray.size();i++)
+					{
+						System.out.println("in loop for clients on server side");
+							threadArray.get(i).printOut(chatHistory, num);
+					}
+		 */
+		
 		// This handling code dies after doing all the printing
 	} // end of method run()
 
 	private String givewaypoints() {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}
@@ -173,15 +187,19 @@ class ClientHandler implements Runnable {
 	void printOut(String output)
 	{
 		PrintWriter out;
+		/*
 		try {
+			//TODO
+			
 			//.modify this to string from object to string
 			ObjectOutputStream outStream = new ObjectOutputStream(s.getOutputStream());
 			out.writeObject(output);
 			outStream.flush();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		*/
 	}
 	
 } // end of class ClientHandler
