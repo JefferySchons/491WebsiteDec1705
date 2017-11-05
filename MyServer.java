@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JTextArea;
@@ -22,6 +23,7 @@ public class MyServer {
 	public static void main(String[] args) throws IOException {
 
 		ServerSocket serverSocket = null;
+		ArrayList<ClientHandler> arrayOfThread =new ArrayList<ClientHandler>();
 		int clientNum = 0; // keeps track of how many clients were created
 		
 		int port=4444;
@@ -51,8 +53,9 @@ public class MyServer {
 				// 2.2 SPAWN A THREAD TO HANDLE CLIENT REQUEST
 				System.out.println("Server got connected to a client"
 						+ ++clientNum);
-				Thread t = new Thread(new ClientHandler(clientSocket, clientNum));
-				t.start();
+				ClientHandler test =new ClientHandler(clientSocket, arrayOfThread, clientNum));
+				arrayOfThread.add(test);
+				Thread t = new Thread(test);
 
 			} catch (IOException e) {
 				System.out.println("Accept failed: 4444");
@@ -88,12 +91,18 @@ class ClientHandler implements Runnable {
 			in = new Scanner(s.getInputStream()); 
 			String clientMessage = in.nextLine();
 			
-			if(clientMessage.substring(0,3).equals("got"))
+			if(clientMessage.substring(0,3).equals("got")) //go to this node
 			{
 				System.out.println(" "  + clientMessage);
 				
+				/*
+				send to all clients clientmessage
+				wait 1 sec
+				send to all clients clientmessage of "000000"
+				*/
+				
 			}
-			else if(clientMessage.substring(0,3).equals("ned"))
+			else if(clientMessage.substring(0,3).equals("ned")) //recive all waypoints
 			{
 				System.out.println(": "  + clientMessage);
 				String waypoint=givewaypoints();
